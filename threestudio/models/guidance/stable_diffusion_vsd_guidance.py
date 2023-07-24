@@ -89,7 +89,7 @@ class StableDiffusionVSDGuidance(BaseModule):
             pipe_lora: StableDiffusionPipeline
 
         pipe = StableDiffusionPipeline.from_pretrained(
-            self.cfg.pretrained_model_name_or_path,
+            self.cfg.pretrained_model_name_or_path, cache_dir='/root/autodl-tmp/models/.',
             **pipe_kwargs,
         ).to(self.device)
         if (
@@ -101,7 +101,7 @@ class StableDiffusionVSDGuidance(BaseModule):
         else:
             self.single_model = False
             pipe_lora = StableDiffusionPipeline.from_pretrained(
-                self.cfg.pretrained_model_name_or_path_lora,
+                self.cfg.pretrained_model_name_or_path_lora, cache_dir='/root/autodl-tmp/models/.',
                 **pipe_lora_kwargs,
             ).to(self.device)
             del pipe_lora.vae
@@ -185,12 +185,14 @@ class StableDiffusionVSDGuidance(BaseModule):
             self.cfg.pretrained_model_name_or_path,
             subfolder="scheduler",
             torch_dtype=self.weights_dtype,
+            cache_dir='/root/autodl-tmp/models/.',
         )
 
         self.scheduler_lora = DDPMScheduler.from_pretrained(
             self.cfg.pretrained_model_name_or_path_lora,
             subfolder="scheduler",
             torch_dtype=self.weights_dtype,
+            cache_dir='/root/autodl-tmp/models/.',
         )
 
         self.scheduler_sample = DPMSolverMultistepScheduler.from_config(

@@ -66,8 +66,6 @@ class InstructPix2PixGuidance(BaseObject):
             subfolder="scheduler",
             torch_dtype=self.weights_dtype,
             cache_dir='/root/autodl-tmp/models/.',
-#
-            cache_dir=self.cfg.cache_dir,
         )
         self.scheduler.set_timesteps(self.cfg.diffusion_steps)
 

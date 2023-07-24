@@ -30,11 +30,13 @@ class DeepFloydPromptProcessor(PromptProcessor):
             load_in_8bit=True,
             variant="8bit",
             device_map="auto",
+            cache_dir='/root/autodl-tmp/models/.',
         )  # FIXME: behavior of auto device map in multi-GPU training
         self.pipe = IFPipeline.from_pretrained(
             self.cfg.pretrained_model_name_or_path,
             text_encoder=self.text_encoder,  # pass the previously instantiated 8bit text encoder
             unet=None,
+            cache_dir='/root/autodl-tmp/models/.',
         )
 
     def destroy_text_encoder(self) -> None:
@@ -56,7 +58,8 @@ class DeepFloydPromptProcessor(PromptProcessor):
     def spawn_func(pretrained_model_name_or_path, prompts, cache_dir):
         max_length = 77
         tokenizer = T5Tokenizer.from_pretrained(
-            pretrained_model_name_or_path, subfolder="tokenizer"
+            pretrained_model_name_or_path, subfolder="tokenizer",
+            cache_dir='/root/autodl-tmp/models/.',
         )
         text_encoder = T5EncoderModel.from_pretrained(
             pretrained_model_name_or_path,
@@ -65,6 +68,7 @@ class DeepFloydPromptProcessor(PromptProcessor):
             load_in_8bit=True,
             variant="8bit",
             device_map="auto",
+            cache_dir='/root/autodl-tmp/models/.',
         )
         with torch.no_grad():
             text_inputs = tokenizer(

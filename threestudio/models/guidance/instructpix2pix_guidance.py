@@ -59,12 +59,14 @@ class InstructPix2PixGuidance(BaseObject):
         }
 
         self.pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(
-            self.cfg.ip2p_name_or_path, **pipe_kwargs
+            self.cfg.ip2p_name_or_path, cache_dir='/root/autodl-tmp/models/.', **pipe_kwargs
         ).to(self.device)
         self.scheduler = DDIMScheduler.from_pretrained(
             self.cfg.ddim_scheduler_name_or_path,
             subfolder="scheduler",
             torch_dtype=self.weights_dtype,
+            cache_dir='/root/autodl-tmp/models/.',
+#
             cache_dir=self.cfg.cache_dir,
         )
         self.scheduler.set_timesteps(self.cfg.diffusion_steps)

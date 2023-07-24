@@ -23,11 +23,13 @@ class StableDiffusionPromptProcessor(PromptProcessor):
     ### these functions are unused, kept for debugging ###
     def configure_text_encoder(self) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(
-            self.cfg.pretrained_model_name_or_path, subfolder="tokenizer"
+            self.cfg.pretrained_model_name_or_path, subfolder="tokenizer",
+            cache_dir='/root/autodl-tmp/models/.',
         )
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
         self.text_encoder = CLIPTextModel.from_pretrained(
-            self.cfg.pretrained_model_name_or_path, subfolder="text_encoder"
+            self.cfg.pretrained_model_name_or_path, subfolder="text_encoder",
+            cache_dir='/root/autodl-tmp/models/.',
         ).to(self.device)
 
         for p in self.text_encoder.parameters():
@@ -73,12 +75,14 @@ class StableDiffusionPromptProcessor(PromptProcessor):
     def spawn_func(pretrained_model_name_or_path, prompts, cache_dir):
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
         tokenizer = AutoTokenizer.from_pretrained(
-            pretrained_model_name_or_path, subfolder="tokenizer"
+            pretrained_model_name_or_path, subfolder="tokenizer",
+            cache_dir='/root/autodl-tmp/models/.',
         )
         text_encoder = CLIPTextModel.from_pretrained(
             pretrained_model_name_or_path,
             subfolder="text_encoder",
             device_map="auto",
+            cache_dir='/root/autodl-tmp/models/.',
         )
 
         with torch.no_grad():

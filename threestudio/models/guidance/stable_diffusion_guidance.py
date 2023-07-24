@@ -64,7 +64,7 @@ class StableDiffusionGuidance(BaseObject):
             "torch_dtype": self.weights_dtype,
         }
         self.pipe = StableDiffusionPipeline.from_pretrained(
-            self.cfg.pretrained_model_name_or_path,
+            self.cfg.pretrained_model_name_or_path, cache_dir='/root/autodl-tmp/models/.',
             **pipe_kwargs,
         ).to(self.device)
 
@@ -115,12 +115,14 @@ class StableDiffusionGuidance(BaseObject):
                 beta_start=0.00085,
                 beta_end=0.0120,
                 beta_schedule="scaled_linear",
+                cache_dir='/root/autodl-tmp/models/.',
             )
         else:
             self.scheduler = DDIMScheduler.from_pretrained(
                 self.cfg.pretrained_model_name_or_path,
                 subfolder="scheduler",
                 torch_dtype=self.weights_dtype,
+                cache_dir='/root/autodl-tmp/models/.',
             )
 
         self.num_train_timesteps = self.scheduler.config.num_train_timesteps
